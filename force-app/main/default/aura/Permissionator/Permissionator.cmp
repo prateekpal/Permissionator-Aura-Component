@@ -1,0 +1,59 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" controller="Dispallobjects" access="global" >
+    <aura:attribute name="objects" type="List"/>
+     <aura:attribute name="profiles" type="List" default="" />
+    <aura:attribute name="fields" type="List"/>
+    <aura:attribute name="selectedFields" type="List"/>
+    <aura:attribute name="radiooptions" type="List" default="[
+    {'label': 'Assign Write Permission', 'value': 'option1'},
+   	{'label': 'Remove Write Permission', 'value': 'option2'},
+    {'label': 'Remove Read and Write Permission', 'value': 'option3'}
+    ]"/>
+    <aura:attribute name="radiovalue" type="String" default=""/>
+    <aura:attribute name="profileId" type="String"/>
+
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-card">
+         <lightning:select label="All Profiles" aura:id="reqprofile" onchange="{!c.populateObjects}" >
+            <option text="None" value="None" />
+             <aura:if isTrue="{!!equals(v.profiles.length,0)}">
+             <aura:iteration items="{!v.profiles}" var="pro">
+                <option text="{!pro}" value="{!pro}" />
+                <!--option value="{!pro}">{!pro}</option-->
+            </aura:iteration>
+                 </aura:if>
+        </lightning:select>
+        <lightning:select label="All objects" aura:id="reqobjects"  onchange="{!c.onObjectsChange }">
+            <option text="None" value="None" />
+             <aura:if isTrue="{!!equals(v.objects,0)}">
+            <aura:iteration items="{!v.objects}" var="option">
+                <option text="{!option}" value="{!option}" />
+                <!--option value="{!obj}">{!obj}</option-->
+            </aura:iteration>
+            </aura:if>
+        </lightning:select>  
+        
+        <!--lightning:select label="All Fields" aura:id="reqfields">
+            <aura:iteration items="{!v.fields}" var="fld">
+                <option value="{!fld}">{!fld}</option>
+            </aura:iteration>
+        </lightning:select--> 
+        
+        <lightning:dualListbox aura:id="selectOptions" name="Select Fields"  label="Select Fields" 
+                               sourceLabel="Available Fields" 
+                               selectedLabel="Selected Fields" 
+                               options="{!v.fields}"
+                               value="{!v.selectedFields}"
+                               />
+        <lightning:radioGroup name="radioGroup"
+                              aura:id="radioGroup"
+                              label="Operation to Perform"
+                              options="{!v.radiooptions }"
+                              value="{!v.radiovalue }"
+                              type="radio"
+                              onchange="{!c.radioChange}"/>
+        
+        <lightning:button aura:id="button" variant="brand" label="Save" title="Save" onclick="{!c.handleSaveClick }" />
+
+    </div>
+</aura:component>
